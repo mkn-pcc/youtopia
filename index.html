@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en-AU">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Explore fiscal policy, marginal income tax and public goods in Youtopia, a fictional classroom economy.">
+<meta name="theme-color" content="#20242a"><title>Youtopia — Economic Control Room</title>
+<link rel="stylesheet" href="styles.css"><link rel="stylesheet" href="art.css"><script defer src="model.js"></script><script defer src="app.js"></script>
+</head>
+<body><div class="console">
+<header class="topbar">
+ <div class="brand"><span class="brand-mark" aria-hidden="true">Y</span><div><p class="brand-title">ECONOMIC CONTROL ROOM</p><p class="brand-subtitle">Year 9 Business</p></div></div>
+ <div class="country-facts"><span>Population <strong>800,000</strong></span><span>Households <strong>400,000</strong></span></div>
+ <div class="top-actions"><button id="notes-button" class="quiet-button">Model notes</button><button id="restart-button" class="quiet-button">Start over</button></div>
+</header>
+<main>
+ <div class="roundbar"><div><span class="round-label" id="round-label">ROUND 1 / 3</span><strong id="condition-label">Spare capacity</strong></div><p id="round-description">Businesses have room to produce more.</p><button id="next-round" class="secondary-button">Next round</button></div>
+ <p class="directions">Choose an activity, make a decision, then return here to compare Youtopia’s figures.</p>
+ <div class="dashboard">
+  <aside class="left-instruments" aria-label="Production and prices">
+   <section class="instrument"><h2>Real output</h2><p class="metric" id="output-value">$40.50bn</p><p class="metric-detail">Goods and services at starting prices</p><p class="change" id="output-change">Starting level</p></section>
+   <section class="instrument"><h2>Model price index</h2><p class="metric" id="price-value">100.0</p><p class="metric-detail">Starting prices = 100</p><p class="change" id="price-change">No change since last decision</p></section>
+   <section class="instrument"><h2>Capacity in use</h2><p class="metric" id="capacity-value">94.7%</p><div class="capacity-track" role="progressbar" id="capacity-track" aria-label="Production capacity in use" aria-valuemin="0" aria-valuemax="100" aria-valuenow="94.7"><span id="capacity-fill"></span></div><p class="metric-detail" id="capacity-detail">Capacity: $42.75bn</p><p class="small-stat">Worker equivalents supported <strong id="jobs-value">405,000</strong></p></section>
+  </aside>
+  <section class="map-panel" aria-labelledby="country-title">
+   <div class="map-heading"><span class="panel-tag">COUNTRY MONITOR</span><h1 id="country-title">YOUTOPIA</h1><p id="map-status">Spare capacity</p></div>
+   <svg id="country-map" viewBox="0 0 640 384" role="group" aria-label="Interactive map of Youtopia. The capital, homes and coastal project open the three activities."></svg>
+   <div class="map-readout"><span>Capital <strong>Commons</strong></span><span>Currency <strong>Youtopian dollar</strong></span></div>
+   <div class="completion-row" aria-label="Activities explored"><span id="done-fiscal">Fiscal policy ○</span><span id="done-tax">Pay rise & tax ○</span><span id="done-goods">Public goods ○</span></div>
+  </section>
+  <aside class="right-instruments" aria-label="Budget, households and public benefits">
+   <section class="instrument budget-panel"><h2>Government budget</h2><p class="metric" id="balance-value">Balanced</p><dl class="budget-lines"><div><dt>Revenue</dt><dd id="revenue-value">$3.18bn</dd></div><div><dt>Spending</dt><dd id="spending-value">$3.18bn</dd></div><div><dt>Balance</dt><dd id="balance-number">$0.00bn</dd></div><div><dt>Debt projection</dt><dd id="debt-value">$12.00bn</dd></div></dl></section>
+   <section class="instrument"><h2>Household income retained</h2><p class="metric" id="income-value">$48,293</p><p class="metric-detail">Average after tax and project payments</p><p class="small-stat">Real buying power <strong id="buying-power">$48,293</strong></p></section>
+   <section class="instrument"><h2>Shared project</h2><p class="metric" id="benefit-value">0 points</p><p class="metric-detail">Benefit points for four households</p><div class="project-track"><span id="project-fill"></span></div><p class="small-stat">Project funding <strong id="project-value">$0m</strong></p></section>
+  </aside>
+ </div>
+ <nav class="activity-buttons" aria-label="Economic activities">
+  <button class="big-red-button" data-activity="fiscal"><span class="button-number">01</span><span>FISCAL POLICY<small>Government spending and tax rebates</small></span></button>
+  <button class="big-red-button" data-activity="tax"><span class="button-number">02</span><span>PAY RISE & TAX<small>Follow the money through each tax band</small></span></button>
+  <button class="big-red-button" data-activity="goods"><span class="button-number">03</span><span>PUBLIC GOODS<small>Choose how to fund a shared project</small></span></button>
+ </nav>
+ <section class="decision-log"><div class="log-heading"><h2>Recent decisions</h2><button class="quiet-button" id="undo-button" disabled>Undo last decision</button></div><ol id="decision-log"><li>Your decisions will appear here.</li></ol></section>
+ <p class="save-status" id="save-status" role="status" aria-live="polite">Progress is saved on this device.</p>
+</main><footer>Fictional country · Australian 2026–27 income-tax bands · Classroom model<br><a href="Youtopia_Offline.html" id="offline-download" download>Download offline classroom copy</a></footer>
+</div>
+<dialog id="activity-dialog" class="activity-dialog" aria-labelledby="activity-title"><div class="dialog-heading"><div><span class="panel-tag">YOUTOPIA DECISION PANEL</span><h2 id="activity-title">Activity</h2></div><button id="close-activity" class="secondary-button">Return to hub</button></div><div id="activity-content"></div></dialog>
+<dialog id="notes-dialog" class="notes-dialog" aria-labelledby="notes-title">
+<div class="dialog-heading"><h2 id="notes-title">How the model works</h2><button id="close-notes" class="secondary-button">Close</button></div>
+<div class="notes-content">
+ <h3>The country</h3><p>Youtopia is fictional. Its population is 800,000, with 400,000 households. Four household profiles each represent 100,000 similar households. All country figures are teaching assumptions, not forecasts for Australia.</p>
+ <h3>Production, demand and prices</h3><p>Households spend 80% of income remaining after income tax, any Youtopian rebate and project contributions. Other demand is held fixed within each round. Government purchases and private project purchases are added to household spending.</p><p>Real output is limited by capacity. While capacity remains available, the price index stays at 100. Beyond that limit, extra nominal demand raises the model price level. This simple short-run model has sticky prices and a hard capacity limit. It does not model continuing inflation, interest rates, international spillovers or every feedback effect.</p><p><code>Demand = household spending + other demand + government purchases + private project purchases</code><br><code>Real output = minimum of demand and capacity</code><br><code>Price index = 100 × maximum of 1 and demand ÷ capacity</code></p><p>Worker equivalents are estimated at $100,000 of real output per worker. This is a fixed-productivity assumption, not a census of employed people or an unemployment rate.</p>
+ <h3>Pay rises and tax</h3><p>Tax bands are the Australian adult resident 2026–27 bands, with the full tax-free threshold. Medicare levy, offsets, deductions, benefit withdrawals and student tax rules are excluded. Youtopia’s optional equal rebate is a separate, fictional fiscal-policy choice.</p><p>A pay rise reallocates business earnings into a household group’s wages. Spending from retained business earnings and other demand are held fixed. The rise is not simply added to GDP: only the resulting change in spending enters the demand model. Nominal business earnings are the residual of output value minus wages.</p>
+ <h3>Public goods</h3><p>The four-player experiment starts each participant with 20 payoff tokens. Each contributed token creates 0.4 benefit points for each participant. A participant’s payoff is tokens kept plus shared benefit. The 1.6 group multiplier is an experimental payoff rule, not a return on real infrastructure or a GDP multiplier.</p><p>For the country connection, each token costs $100 per household in its 100,000-household group: $10m nationally. Contributions are spent once on the project. Voluntary funding appears as private project purchases; an equal levy appears as earmarked government revenue and project purchases. Identical contribution amounts have identical effects on model demand. Benefit points stay separate from money and GDP.</p><p>Solo mode uses stated, fictional contributions from three model households. Pass-and-play lets four students make private choices on one device. It does not connect different devices.</p>
+ <h3>Budget and rounds</h3><p>Budget balance equals revenue minus spending. Editing a policy changes the current round’s projected balance; it does not spend another year’s budget. Closing a round adds its balance to the debt calculation once. Debt projection shows the expected position at the end of the current round.</p><p>Round 2 adds $2.25bn of other demand. Round 3 retains that demand but reduces capacity by 10%. Earlier decisions remain in place.</p>
+ <h3>Sources</h3><ul>
+ <li><a href="https://www.rba.gov.au/education/resources/explainers/causes-of-inflation.html" target="_blank" rel="noopener noreferrer">RBA: Causes of inflation</a></li>
+ <li><a href="https://www.rba.gov.au/education/professional-development/teacher-immersion-series/2026/pdf/fiscal-policy.pdf" target="_blank" rel="noopener noreferrer">Treasury: Fiscal policy and the outlook, July 2026</a></li>
+ <li><a href="https://www.ato.gov.au/tax-rates-and-codes/tax-rates-australian-residents" target="_blank" rel="noopener noreferrer">ATO: Resident tax rates</a></li>
+ <li><a href="https://books.core-econ.org/experiencing-economics/experiments/04-public-goods-game.html" target="_blank" rel="noopener noreferrer">CORE Econ: Public-goods experiment</a></li>
+ </ul>
+</div></dialog>
+</body></html>
