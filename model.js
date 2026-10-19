@@ -41,7 +41,7 @@
     if(!raw||raw.version!==1)return d;
     d.round=Math.round(clamp(raw.round,0,2));
     d.gChange=clamp(raw.gChange,-2500,6000);
-    d.rebate=clamp(raw.rebate,0,1000);
+    d.rebate=clamp(raw.rebate,-1000,1000);
     d.raises=BASE_INCOMES.map((_,i)=>clamp(raw.raises?.[i],0,20000));
     d.goods.mode=raw.goods?.mode==='levy'?'levy':'voluntary';
     d.goods.contributions=publicGoods(raw.goods?.contributions).contributions;
@@ -83,7 +83,7 @@
   }
   function applyDecision(input,module,patch,label) {
     const old=cleanState(input),before=economy(old),next=clone(old);
-    if(module==='fiscal') {next.gChange=clamp(patch.gChange,-2500,6000);next.rebate=clamp(patch.rebate,0,1000);}
+    if(module==='fiscal') {next.gChange=clamp(patch.gChange,-2500,6000);next.rebate=clamp(patch.rebate,-1000,1000);}
     else if(module==='tax') {const i=Math.round(clamp(patch.household,0,3));next.raises[i]=clamp(patch.raise,0,20000);}
     else if(module==='goods') {next.goods={mode:patch.mode==='levy'?'levy':'voluntary',contributions:publicGoods(patch.contributions).contributions};}
     else throw new Error('Unknown activity');

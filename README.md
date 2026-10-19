@@ -2,13 +2,31 @@
 
 [Play Youtopia](https://mkn-pcc.github.io/youtopia/)
 
-A classroom economic simulator for Year 9 Business. Explore fiscal policy, pay rises and marginal tax, and public-goods contributions, then see how decisions affect a fictional country's economy. The game includes three economic conditions, undo, restart and a round review.
+A Year 9 Business classroom simulator for government purchases, tax, pay rises and public goods.
 
-Open `index.html` through GitHub Pages. The JavaScript, styles, pixel artwork and fonts are all included in this repository. Progress is stored locally in the browser; the game requests no student names or accounts.
+## Teaching with Youtopia
+
+Guided play is the default. Begin on the projector, read the short concept explanation and discuss a prediction before applying a decision. The result compares the country figures and reveals the chain of effects one step at a time. Discuss the trade-off, then reveal the example explanation when ready.
+
+Use the question-mark buttons for metric definitions and the term buttons for contextual help. Supporting figures are hidden initially in Guided play. Explore restores the original adjustable controls; lesson reminders and explanations remain available. Each browser runs a separate country, so projector controls do not remotely control student devices. Existing saved economies are preserved.
+
+Try fiscal spending with spare capacity, then repeat in a demand boom or supply disruption. The same spending change can affect output and prices differently. The pay-rise example retains the lesson's $45,000 to $46,000 calculation. Public-goods cases compare cooperation, free riding and compulsory funding.
+
+The offline download includes the same teaching features, code, artwork and fonts.
+
+## Development
+
+The buildless runtime is at the repository root. Install the retained development dependency (`pnpm install --frozen-lockfile`), then run:
+
+- `pnpm test` — model and DOM interaction tests, including guided predictions, reveals, storage and tax adjustments.
+- `pnpm run check` — JavaScript syntax checks.
+- `node scripts/export-offline.js` — refresh the self-contained offline classroom edition after edits.
+
+See `TEACHING_NOTES.md` for source alignment and model boundaries.
 
 ## Model boundary
 
-Youtopia is a fictional country, not an Australian forecast. Four income cohorts represent 100,000 households each. Baseline wages are $30k/$45k/$60k/$90k; exact annual income taxes use the adult Australian resident 2026–27 bands, excluding Medicare levy and offsets. An optional $0–$1,000 rebate is a separate fictional policy.
+Youtopia is a fictional country, not an Australian forecast. Four income cohorts represent 100,000 households each. Baseline wages are $30k/$45k/$60k/$90k; exact annual income taxes use the adult Australian resident 2026–27 bands, excluding Medicare levy and offsets. An optional equal-dollar tax adjustment ranges from $1,000 extra income tax per household to a $1,000 rebate. It is separate from the Australian marginal tax bands.
 
 Households spend 80% of income after tax, rebate and project contributions. Wages are reallocated from residual firm earnings; consumption from retained earnings and other demand are held fixed. Real output is `min(capacity, nominal demand)` at starting-price units; price level is `max(1, demand/capacity)`. Nominal output is always real output times price level and equals total nominal purchases. Worker equivalents use an explicit $100k real-output-per-worker assumption, not a measured unemployment rate.
 

@@ -1,0 +1,11 @@
+{
+  "name": "youtopia-economy",
+  "private": true,
+  "scripts": {
+    "test": "node --test tests/*.test.js",
+    "check": "node --check model.js && node --check app.js && node --check teaching-model.js && node --check teaching.js"
+  },
+  "devDependencies": {
+    "linkedom": "^0.18.13"
+  }
+}
