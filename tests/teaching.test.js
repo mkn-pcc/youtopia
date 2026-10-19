@@ -13,7 +13,7 @@ function boot(saved){
  const localStorage={getItem:k=>storage.get(k)||null,setItem:(k,v)=>storage.set(k,v)};
  window.YoutopiaModel=M;window.YoutopiaTeachingModel=T;window.confirm=()=>true;
  const context={window,document:window.document,localStorage,Intl,console,setTimeout:()=>0,clearTimeout:()=>{},Math};
- for(const name of ['app.js','teaching.js'])vm.runInNewContext(fs.readFileSync(path.join(__dirname,'..',name),'utf8'),context);
+ for(const name of ['visual-learning.js','app.js','teaching.js'])vm.runInNewContext(fs.readFileSync(path.join(__dirname,'..',name),'utf8'),context);
  const $=id=>window.document.getElementById(id);
  const click=target=>{const el=typeof target==='string'?$(target):target;assert.ok(el,'Missing '+target);el.dispatchEvent(new window.Event('click',{bubbles:true}));};
  return {window,$,click,storage,select:()=>click(window.document.querySelector('[data-prediction="0"]')),state:()=>window.YoutopiaApp.getState(),economy:()=>window.YoutopiaApp.getEconomy(),open:t=>window.YoutopiaApp.openActivity(t)};
@@ -39,10 +39,11 @@ test('the same spending increase explains extra production with spare capacity a
  const boom=M.nextRound(before),boomAfter=M.applyDecision(boom,'fiscal',{gChange:1000,rebate:0},'spend');const full=T.explain(boom,boomAfter,'fiscal');
  assert.match(full.production,/Production stays at its limit/);assert.match(full.production,/price index/);near(full.after.realOutput,full.before.realOutput);assert.ok(full.after.priceIndex>full.before.priceIndex);
 });
-test('guided marginal-tax lesson keeps the original $300/$700 example and explains an unchanged repeat',()=>{
+test('guided marginal-tax lesson keeps the $300/$700 example and calculates later rises from current income',()=>{
  const a=boot();a.open('tax');assert.match(a.$('lesson-content').textContent,/earlier income/);a.click('lesson-predict');a.select();a.click('lesson-run');
  assert.equal(a.state().raises[1],1000);near(a.economy().balance,30);near(a.economy().realOutput,40556);assert.match(a.$('lesson-content').textContent,/tax rates themselves have not changed/);a.click('lesson-finish');
- a.open('tax');a.click('lesson-predict');a.select();a.click('lesson-run');near(a.economy().balance,30);assert.match(a.$('lesson-content').textContent,/does not add a second pay rise/);
+ a.open('tax');a.click('lesson-predict');assert.match(a.$('lesson-content').textContent,/\$46,000 to \$47,000/);a.select();a.click('lesson-run');near(a.economy().balance,60);assert.equal(a.state().raises[1],2000);
+ const fixed=a.state(),again=M.applyDecision(fixed,'tax',{household:1,raise:2000},'same salary');assert.match(T.explain(fixed,again,'tax').steps[0],/does not add a second pay rise/);
 });
 test('guided free-rider and compulsory-levy lessons preserve payoffs and separate points from project money',()=>{
  const a=boot();a.open('goods');a.click('lesson-predict');a.click(a.window.document.querySelector('[data-scenario="free"]'));a.select();a.click('lesson-run');
@@ -60,4 +61,40 @@ test('negative tax adjustments preserve the national accounting identity across 
   const s=M.initialState();Object.assign(s,{round,rebate,gChange:1000});s.goods={mode,contributions:[20,10,5,0]};const e=M.economy(s);
   near(e.nominalOutput,e.householdSpending+e.fixedOther+e.governmentSpending+e.privateProject);near(e.balance,e.governmentRevenue-e.governmentSpending);assert.ok(e.price>=1&&e.realOutput<=e.capacity);
  }
+});
+test('interactive everyday comparisons do not alter the country, and teach distinct demand and supply changes',()=>{
+ const a=boot();a.open('fiscal');const before=JSON.stringify(a.state());
+ const picture=()=>a.window.document.querySelector('.connection-stage');
+ assert.match(picture().textContent,/6 made; 0 orders unfilled; 4 spare places/);
+ a.click(a.window.document.querySelector('[data-orders="14"]'));assert.match(picture().textContent,/10 made; 4 orders unfilled/);
+ a.click(a.window.document.querySelector('[data-capacity="7"]'));assert.match(picture().textContent,/7 made; 7 orders unfilled/);
+ a.click(a.window.document.querySelector('[data-demo="wallet"]'));assert.match(picture().textContent,/spend \$8 more/);
+ a.click(a.window.document.querySelector('[data-wallet="less"]'));assert.match(picture().textContent,/spends \$8 less/);
+ a.click(a.window.document.querySelector('[data-visual-next]'));assert.match(picture().textContent,/\$40.50bn to \$41.50bn/);
+ a.click(a.window.document.querySelector('[data-visual-next]'));assert.match(picture().textContent,/imports, changing interest rates, saving and delays/);
+ assert.equal(JSON.stringify(a.state()),before);
+});
+test('visual tax and public-goods examples reveal mechanisms before any country decision',()=>{
+ const a=boot();a.open('tax');a.click(a.window.document.querySelector('[data-show-tax]'));
+ assert.equal(a.window.document.querySelectorAll('.money-spent').length,3);assert.equal(a.window.document.querySelectorAll('.money-kept').length,7);assert.match(a.$('lesson-content').textContent,/Its income tax stays \$4,020/);assert.equal(a.state().raises[1],0);
+ a.click(a.window.document.querySelector('[data-visual-step="2"]'));assert.match(a.$('lesson-content').textContent,/Under-18 tax rules may differ/);a.click('lesson-close');
+ a.open('goods');a.click(a.window.document.querySelector('[data-warning="no"]'));assert.match(a.$('lesson-content').textContent,/shared service receives no funding/);assert.equal(a.economy().countryProject,0);
+ a.click(a.window.document.querySelector('[data-visual-step="2"]'));assert.match(a.$('lesson-content').textContent,/Bureau of Meteorology/);assert.match(a.$('lesson-content').textContent,/not the Bureau’s funding system/);
+});
+test('later guided tax decisions and control limits describe their actual changes',()=>{
+ let s=M.initialState();s.rebate=-800;
+ let c=T.scenario('fiscal','tax',s),after=M.applyDecision(s,'fiscal',c.patch,c.label);assert.equal(after.rebate,-1000);assert.match(c.label,/\$200 more/);near(T.explain(s,after,'fiscal').demandChange,-64);
+ c=T.scenario('fiscal','tax',after);assert.match(c.reason,/stay the same/);assert.equal(c.patch.rebate,-1000);
+ s.rebate=1000;c=T.scenario('fiscal','rebate',s);assert.match(c.options[0],/Nothing changes/);
+ s.raises[1]=10000;c=T.scenario('tax','rise',s);assert.match(c.question,/\$55,000 to \$56,000/);assert.equal(c.patch.raise,11000);
+ s.raises[1]=20000;c=T.scenario('tax','rise',s);assert.match(c.options[0],/stay the same/);assert.equal(c.patch.raise,20000);
+});
+test('Australia reference is accessible without replacing an unfinished lesson',()=>{
+ const a=boot();a.open('fiscal');a.click('lesson-predict');const before=JSON.stringify(a.state());
+ a.click('australia-reference');assert.match(a.$('help-content').textContent,/teaching assumptions/);assert.match(a.$('help-content').textContent,/GST, company taxes, welfare payments and debt interest/);
+ a.click('help-close');assert.ok(a.$('lesson-run').disabled);assert.equal(JSON.stringify(a.state()),before);
+});
+test('large accumulated surpluses display net financial assets rather than negative debt',()=>{
+ const s=M.initialState();s.gChange=-2500;s.rebate=-1000;s.raises=[20000,20000,20000,20000];const saved=M.nextRound(M.nextRound(s));assert.ok(M.economy(saved).projectedDebt<0);
+ const a=boot([['youtopia-economic-control-room-v1',JSON.stringify({state:saved})]]);assert.match(a.$('debt-label').textContent,/Net financial assets/);assert.doesNotMatch(a.$('debt-value').textContent,/-/);
 });

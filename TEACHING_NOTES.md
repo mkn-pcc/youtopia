@@ -39,4 +39,10 @@ Explore retains the original sliders, the tax calculation and the four-player pu
 
 ## Release validation
 
-22 automated checks cover the retained model and original activities plus guided predictions without premature application, progressive causal reveals, the $300/$700 worked example, repeated unchanged decisions, free-rider and levy cases, negative tax adjustments, storage, undo and restart. Accounting identities are checked across all rounds and both project-funding methods. Browser verification is recorded separately in the release handover.
+27 automated checks cover the retained model and original activities plus guided predictions without premature application, progressive causal reveals, the $300/$700 worked example, repeated unchanged decisions, free-rider and levy cases, negative tax adjustments, storage, undo and restart. Accounting identities are checked across all rounds and both project-funding methods. Browser verification is recorded separately in the release handover.
+
+## Concrete and visual teaching update (20 October 2026)
+
+Everyday example → In Youtopia → In Australia views explicitly translate orders into demand, resources into capacity and meals into output; the ten-square worked tax split preserves tax on earlier income; a shared caravan-park storm warning separates payment from benefit. The everyday counts illustrate mechanisms rather than literal national scale conversions. Visual result comparisons use the same scale before and after. Source links and limits of each comparison are visible in the Australian view. Round introductions state what stayed and what changed.
+
+The existing Made by Mr Knox stamp is reproduced unchanged in the upper-left header. Guided comparisons now calculate policy changes from current settings and handle limits without contradicting the prediction. Net assets are labelled correctly if surpluses exceed initial net debt. The offline edition embeds all scripts, styles, fonts, scenes and the stamp. See MODEL_REFERENCE.md for source checks and what remains deliberately simplified.

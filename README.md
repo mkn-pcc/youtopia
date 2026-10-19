@@ -33,3 +33,7 @@ Households spend 80% of income after tax, rebate and project contributions. Wage
 The public-goods experiment uses four participants, 20 initial payoff tokens each, and `20-own+0.4*total` payoffs. These points never become cash or GDP. Each contributed token funds $100 per household in that cohort, i.e. $10m nationally. Voluntary project purchases and an equal levy-funded project with the same contribution vector produce identical macro demand. Government levy receipts and project spending are both included. Policy changes update a projected current-period budget rather than accruing another year's debt per click.
 
 Round 1 has spare capacity. Round 2 raises other demand by $2.25bn. Round 3 retains that demand and cuts capacity by 10%. Earlier policies persist. Model notes in the app explain assumptions and link to RBA, Treasury, ATO and CORE Econ primary sources.
+
+## Concrete examples and Australian connections
+
+Guided lessons now have Everyday example, In Youtopia and In Australia views. Interactive lunch-stall, $100-square tax and shared-warning examples make the causal connections explicit before a national decision. The upper-left stamp is the existing Made by Mr Knox artwork. Country demonstrations leave saved policies unchanged. The in-game Australia and the model panel gives primary references and visible assumptions; see MODEL_REFERENCE.md for the conceptual audit. The engine remains a simplified short-run simulator, not an Australian forecast.
